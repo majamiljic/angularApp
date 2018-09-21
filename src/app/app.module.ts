@@ -24,6 +24,7 @@ import { DishService } from './services/dish.service';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 
 import 'hammerjs';
+import { PromotionService } from './services/promotion.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,10 @@ import 'hammerjs';
     MatButtonModule,
     AppRoutingModule
   ],
-  providers: [DishService],
+  providers: [
+    DishService,
+    PromotionService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
