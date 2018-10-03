@@ -3,3 +3,11 @@
     display: flex;
     align-items: flex-start;
 }
+
+.full-width {
+    width: 95%
+}
+
+.mat-slider-horizontal {
+  width: 300px;
+}
