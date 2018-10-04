@@ -40,6 +40,7 @@ import { RestangularConfigFactory } from './shared/restConfig';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 
 import 'hammerjs';
+import { HighlightDirective } from './directives/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import 'hammerjs';
     HomeComponent,
     AboutComponent,
     ContactComponent,
-    LoginComponent
+    LoginComponent,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,
