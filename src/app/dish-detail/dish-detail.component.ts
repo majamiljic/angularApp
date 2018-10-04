@@ -22,6 +22,8 @@ export class DishDetailComponent implements OnInit {
   next: number;
   feedbackForm: FormGroup;
   comment: Comment;
+  errMess: string;
+  dishcopy = null;
   
   formErrors = {
     'author': '',
@@ -30,11 +32,11 @@ export class DishDetailComponent implements OnInit {
 
   validationComments = {
     'author': {
-      'required':      'Name is required.',
-      'minlength':     'Name must be at least 2 characters long.'
+      'required': 'Name is required.',
+      'minlength': 'Name must be at least 2 characters long.'
     },
     'comment': {
-      'required':      'Comment is required.'
+      'required': 'Comment is required.'
     },
   };
 
@@ -49,9 +51,16 @@ export class DishDetailComponent implements OnInit {
   ngOnInit() {
     this.createForm();
 
-    this.dishService.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
+    this.dishService.getDishIds().subscribe(dishIds => this.dishIds = dishIds, errmess => this.errMess = <any>errmess.message);
+
+    this.route.params
+      .pipe(switchMap((params: Params) => { 
+        return this.dishService.getDish(+params['id'])
+      }))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); }, errmess => { this.dish = null; this.errMess = <any>errmess; });
+
     this.route.params.pipe(switchMap((params: Params) => this.dishService.getDish(+params['id'])))
-    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); }, errmess => this.errMess = <any>errmess.message);
   }
 
   setPrevNext(dishId: number) {
@@ -103,7 +112,10 @@ export class DishDetailComponent implements OnInit {
     let date = new Date();
     this.comment.date = date.toISOString()
     ;
-    this.dish.comments.push(this.comment);
+    //this.dish.comments.push(this.comment);
+
+    this.dishcopy.comments.push(this.comment);
+    this.dishcopy.save().subscribe(dish => this.dish = dish);
 
     this.feedbackForm.reset({
       author: '',
