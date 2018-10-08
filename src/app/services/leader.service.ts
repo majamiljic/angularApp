@@ -1,8 +1,7 @@
+import { Restangular } from 'ngx-restangular';
 import { baseURL } from './../shared/baseurl';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Leader } from '../shared/leader';
-import { LEADERS } from '../shared/leaders';
 
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
@@ -12,17 +11,18 @@ import { delay, map } from 'rxjs/operators';
 })
 export class LeaderService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private restangular: Restangular) { }
 
   getLeaders(): Observable<Leader[]> {
-    return this.http.get<Leader[]>(baseURL + 'leaders');
+    return this.restangular.all('leaders').getList();
   }
 
   getLeader(id: number): Observable<Leader> {
-    return this.http.get<Leader>(baseURL + 'leaders/' + id);
+    return  this.restangular.one('leaders', id).get();
   }
 
   getFeaturedLeader(): Observable<Leader> {
-    return this.http.get<Leader[]>(baseURL + 'leaders?featured=true').pipe(map(leaders => leaders[0]));
+    return this.restangular.all('leaders').getList({featured: true})
+      .pipe(map(leaders => leaders[0]));
   }
 }
